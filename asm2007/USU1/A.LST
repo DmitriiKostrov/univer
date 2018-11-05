@@ -1,0 +1,123 @@
+Turbo Assembler	 Version 3.1	    14/03/07 11:35:30	    Page 1
+a.ASM
+
+
+
+      1				     ;программа	отыскивает наименьший элемент массива и	его номер
+      2	0000			     text segment
+      3					     assume CS:text, DS:data
+      4
+      5	0000			     start:
+      6	0000  B8 0000s			     mov AX,data
+      7	0003  8E D8			     mov DS,AX
+      8
+      9	0005  8B 16 0000r		     mov DX,Mass
+     10	0009  B9 0008			     mov CX,8;счетчик
+     11	000C  BB 0002			     mov BX,2;номер элемента массива
+     12	000F  B8 0001			     mov AX,1; номер символа
+     13	0012  3B 97 0000r	     cont:   cmp DX,Mass[BX] ; если первый операнд меньше, чем второй
+     14	0016  7C 06			     jl	next	    ;да,
+     15	0018  8B 97 0000r		     mov DX,Mass[BX] ;нет,в DX заносим следующий элемен
+     16	001C  8B C3			     mov AX,BX
+     17	001E  43		     next:   inc BX
+     18	001F  43			     inc BX
+     19	0020  E2 F0			     loop cont
+     20
+     21	0022  D1 E8			     shr AX,1 ;делит на	2
+     22	0024  40			     inc Ax
+     23	0025  52			     push DX
+     24	0026			     write:  ;mov AX,DX
+     25	0026  BB 000A			     mov BX,10
+     26	0029  BE 0000			     mov SI,0 ;счётчик для строки
+     27	002C  F6 F3		     loop1:  div bl
+     28	002E  80 C4 30			     add AH,'0'
+     29	0031  8A D4			     mov dl,ah
+     30	0033  88 94 0012r		     mov answ[SI],DL
+     31	0037  46			     inc SI
+     32	0038  B4 02			     mov ah,2h
+     33	003A  8A C8			     mov cl,al	;сохраняем al т.к. int 21h ломает его
+     34	003C  CD 21			     int 21h	;ломает	AL
+     35	003E  8A C1			     mov al,cl
+     36	0040  B4 00			     mov ah,0
+     37	0042  3D 0000			     cmp ax,0
+     38	0045  7F E5			     jg	loop1
+     39
+     40	0047  5A			     pop DX
+     41	0048  8B C2			     mov AX,DX
+     42	004A  BB 000A			     mov BX,10
+     43	004D  BE 0000			     mov SI,0 ;счётчик для строки
+     44	0050  F6 F3		     loop2:  div bl
+     45	0052  80 C4 30			     add AH,'0'
+     46	0055  8A D4			     mov dl,ah
+     47	0057  88 94 0012r		     mov answ[SI],DL
+     48	005B  46			     inc SI
+     49	005C  B4 02			     mov ah,2h
+     50	005E  8A C8			     mov cl,al	;сохраняем al т.к. int 21h ломает его
+     51	0060  CD 21			     int 21h	;ломает	AL
+     52	0062  8A C1			     mov al,cl
+     53	0064  B4 00			     mov ah,0
+     54	0066  3D 0000			     cmp ax,0
+     55	0069  7F E5			     jg	loop2
+     56	006B  B8 4C00			 mov AX,4C00h
+     57	006E  CD 21			     int 21h
+Turbo Assembler	 Version 3.1	    14/03/07 11:35:30	    Page 2
+a.ASM
+
+
+
+     58
+     59	0000			     data segment
+     60	0000  007B 0004	000C 0017 +	     Mass dw 123,4,12,23,25,1,17,123,123;
+     61	      0019 0001	0011 007B +
+     62	      007B
+     63	0012  03*(2A) 24		     answ db 3 dup('*'),'$'
+     64	0016  ??			     x db ?
+     65	0017			     data ends
+     66
+     67	0000			     stack segment stack
+*Warning* a.ASM(65) Reserved word used as symbol: STACK
+     68	0000  0100*(00)			     db	256 dup(0)
+     69	0100			     stack ends
+     70					      end start
+*Warning* a.ASM(68) Open segment: TEXT
+Turbo Assembler	 Version 3.1	    14/03/07 11:35:30	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name		Type   Value			   Cref	(defined at #)
+
+??DATE			Text   "14/03/07"
+??FILENAME		Text   "a	"
+??TIME			Text   "11:35:30"
+??VERSION		Number 030A
+@CPU			Text   0101H
+@CURSEG			Text   TEXT			   #2  #59  #65	 #67  #69
+@FILENAME		Text   A
+@WORDSIZE		Text   2			   #2  #59  #65	 #67  #69
+ANSW			Byte   DATA:0012		   30  47  #63
+CONT			Near   TEXT:0012		   #13	19
+LOOP1			Near   TEXT:002C		   #27	38
+LOOP2			Near   TEXT:0050		   #44	55
+MASS			Word   DATA:0000		   9  13  15  #60
+NEXT			Near   TEXT:001E		   14  #17
+START			Near   TEXT:0000		   #5  70
+WRITE			Near   TEXT:0026		   #24
+X			Byte   DATA:0016		   #64
+
+Groups & Segments	Bit Size Align	Combine	Class	   Cref	(defined at #)
+
+DATA			16  0017 Para	none		   3  6	 #59
+STACK			16  0100 Para	Stack		   #67
+TEXT			16  0070 Para	none		   #2  3
+Turbo Assembler	 Version 3.1	    14/03/07 11:35:30	    Page 4
+Error Summary
+
+
+
+stack segment stack
+*Warning* a.ASM(65) Reserved word used as symbol: STACK
+	 end start
+*Warning* a.ASM(68) Open segment: TEXT
+

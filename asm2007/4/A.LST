@@ -1,0 +1,33 @@
+Turbo Assembler	 Version 3.1	    01/03/07 10:34:44	    Page 1
+a.ASM
+
+
+
+      1	0000			     text segment
+      2					     assume CS:text, DS:data
+      3
+      4	0000  A1 0000r		     begin:  mov AX,x
+      5	0003  BB 000A			     mov BX,10
+      6	0006  B9 0000			     mov CX,0
+      7	0009  33 D2		     next:   xor DX,DX
+      8	000B  BB 000A			     mov BX,10
+      9	000E  03 CA			     add CX,DX
+     10	0010  3D 0000			     cmp AX,0
+     11	0013  75 F4			     jnz next
+     12	0015  89 0E 0002r		     mov sum,cx
+     13				     ;выдадим число на экран
+     14	0019  B4 09			     mov AH,09h
+     15	001B  BA 0002r			     mov DX,offset sum
+     16	001E  CD 21			     int 21h
+     17	0020  B4 4C			     mov AH,4Ch
+     18	0022  B0 00			     mov AL,0
+     19	0024  CD 21			     int 21h
+     20	0026			     text ends
+     21
+     22	0000			     data segment
+     23	0000  007B			     x dw 123
+     24	0002  0000			     sum dw 0
+     25	0004			     data ends
+     26
+     27				     end begin
+
